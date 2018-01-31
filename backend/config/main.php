@@ -19,9 +19,24 @@ return [
                 'httpOnly' => true,
                 'path' => '/admin',
             ],
+            /*'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],*/
+            
+            //If used reverse proxy
+            'trustedHosts' => [
+                '127.0.0.1',
+            ],
+            'secureHeaders' => [
+                'X-Forwarded-For',
+                'X-Forwarded-Host',
+                'X-Forwarded-Proto',
+                'X-Proxy-User-Ip',
+                'Front-End-Https',
+            ],
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => true,
             'identityCookie' => [
                 'name'     => '_backendIdentity',
@@ -36,6 +51,10 @@ return [
                 'path' => '/admin',
             ],
         ],
+        /*'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+            //'cache' => 'cache',
+        ],*/
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -52,6 +71,11 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+            ],
+        ],
+        'assetManager' => [
+            'bundles' => [
+                'yii\bootstrap\BootstrapAsset' => false,
             ],
         ],
     ],

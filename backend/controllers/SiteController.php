@@ -5,18 +5,17 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
+use backend\models\LoginForm;
+use backend\models\PasswordForm;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
-{
+class SiteController extends Controller {
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -26,7 +25,6 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,8 +42,7 @@ class SiteController extends Controller
     /**
      * @inheritdoc
      */
-    public function actions()
-    {
+    public function actions() {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -58,8 +55,7 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         return $this->render('index');
     }
 
@@ -68,8 +64,9 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionLogin()
-    {
+    public function actionLogin() {
+        $this->layout = 'auth';
+        
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
@@ -89,10 +86,24 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionLogout()
-    {
+    public function actionLogout() {
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    /**
+     * Change Password action.
+     *
+     * @return string
+     */
+    public function actionPassword() {
+        $model = new PasswordForm();
+        if ($model->load(Yii::$app->request->post()) && $model->password()) {
+            Yii::$app->session->setFlash('success', 'Пароль успешно изменен');
+            return $this->refresh();
+        }
+
+        return $this->render('password', compact('model'));
     }
 }

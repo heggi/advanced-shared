@@ -15,7 +15,14 @@ return [
         'fixture' => [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
-          ],
+        ],
+        'migrate' => [
+            'class' => 'yii\console\controllers\MigrateController',
+            'migrationPath' => [
+                //'@vendor/yiisoft/yii2/rbac/migrations',
+                '@console/migrations',
+            ],
+        ],
     ],
     'components' => [
         'log' => [
@@ -26,6 +33,9 @@ return [
                 ],
             ],
         ],
+        /*'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],*/
     ],
     'params' => $params,
 ];
